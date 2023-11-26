@@ -1,20 +1,25 @@
 package com.dbs.dbsproject.util;
 
-import java.lang.reflect.Array;
+import org.springframework.stereotype.Component;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+@Component
 public class PasswordEncoder {
-    public String encode(String pw){
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(pw.getBytes());
-            byte[] data = md.digest();
-            return Arrays.toString(data);
-        }catch (NoSuchAlgorithmException e){
-            e.printStackTrace();
+    public String encode(String pw) throws NoSuchAlgorithmException{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(pw.getBytes());
+
+        return bytesToHex(md.digest());
+    }
+
+    private String bytesToHex(byte[] bytes){
+        StringBuilder builder = new StringBuilder();
+        for(byte b : bytes){
+            builder.append(String.format("%02x",b));
         }
-        return "Encoding 실패";
+        return builder.toString();
     }
 }

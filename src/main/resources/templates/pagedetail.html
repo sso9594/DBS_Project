@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jua&family=Karla:wght@300&display=swap" rel="stylesheet">
-    <title>로그인</title>
+    <title>상품 상세 페이지</title>
     <!-- 추가적인 스타일시트 및 스크립트를 여기에 추가하세요 -->
     <style>
         *{
@@ -18,28 +18,50 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        form {
+        .product-details {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input {
+        img {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        h2, p {
+            margin: 0;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #4caf50;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .description {
+            margin-top: 20px;
+            color: #555;
         }
 
         button {
@@ -58,18 +80,13 @@
 </head>
 <body>
 
-<form th:action="@{/login}" th:object="${loginRequest}" method="post">
-    <h2>로그인</h2>
-
-    <label for="loginid">아이디:</label>
-    <input type="text" id="loginid" th:field="*{id}" required>
-
-    <label for="password">비밀번호:</label>
-    <input type="password" id="password" th:field="*{password}" required>
-
-    <button type="submit">로그인</button>
-    <button type="button" onclick="location.href='signup'">회원가입</button>
-</form>
+<div class="product-details">
+    <img th:src="@{/images/product.img}" alt="Product Image">
+    <h2>상품 제목</h2>
+    <p class="price" th:text="${'가격: ₩' + product.price}">가격: $100</p>
+    <p th:text="${product.content}">상품 설명</p>
+    <button>장바구니에 담기</button>
+</div>
 
 </body>
 </html>

@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jua&family=Karla:wght@300&display=swap" rel="stylesheet">
-    <title>로그인</title>
+    <title>연근마켓 - 게시글 작성</title>
     <!-- 추가적인 스타일시트 및 스크립트를 여기에 추가하세요 -->
     <style>
         *{
@@ -35,7 +35,8 @@
             margin-bottom: 8px;
         }
 
-        input {
+        input,
+        textarea {
             width: 100%;
             padding: 8px;
             margin-bottom: 16px;
@@ -54,21 +55,49 @@
         button:hover {
             background-color: #45a049;
         }
+
+        img{
+            width: 200px;
+            height: 200px;
+        }
+
+        #content{
+            height: 200px;
+        }
     </style>
+    <script>
+        function readUrl(input){
+            if (input.files && input.files[0]){
+                var reader = new FileReader();
+                reader.onload = function (e){
+                    document.getElementById('preview').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }else{
+                document.getElementById('preview').src="";
+            }
+        }
+    </script>
 </head>
 <body>
 
-<form th:action="@{/login}" th:object="${loginRequest}" method="post">
-    <h2>로그인</h2>
+<form th:action="@{/save}" th:object="${ProductDto}" method="post">
+    <h2>게시글 작성</h2>
 
-    <label for="loginid">아이디:</label>
-    <input type="text" id="loginid" th:field="*{id}" required>
+    <label for="title">제목:</label>
+    <input type="text" th:field="*{title}" required>
 
-    <label for="password">비밀번호:</label>
-    <input type="password" id="password" th:field="*{password}" required>
+    <label for="content">내용:</label>
+    <textarea th:field="*{content}" rows="4" required></textarea>
 
-    <button type="submit">로그인</button>
-    <button type="button" onclick="location.href='signup'">회원가입</button>
+    <label for="img">이미지 URL:</label>
+    <img id="preview" />
+    <input type="file" th:field="*{img}" onchange="readUrl(this);" accept="image/*" multiple>
+
+    <label for="price">가격:</label>
+    <input type="number" th:field="*{price}" required>
+
+    <button class="btn-submit" type="submit">작성 완료</button>
 </form>
 
 </body>

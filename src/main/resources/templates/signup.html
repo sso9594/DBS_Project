@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jua&family=Karla:wght@300&display=swap" rel="stylesheet">
-    <title>로그인</title>
+    <title>회원가입</title>
     <!-- 추가적인 스타일시트 및 스크립트를 여기에 추가하세요 -->
     <style>
         *{
@@ -58,17 +58,29 @@
 </head>
 <body>
 
-<form th:action="@{/login}" th:object="${loginRequest}" method="post">
-    <h2>로그인</h2>
+<form th:action="@{/signup}" th:object="${joinRequest}" method="post">
+    <h2>회원가입</h2>
 
     <label for="loginid">아이디:</label>
-    <input type="text" id="loginid" th:field="*{id}" required>
+    <input type="text" th:field="*{loginid}" required>
 
     <label for="password">비밀번호:</label>
-    <input type="password" id="password" th:field="*{password}" required>
+    <input type="password" th:field="*{password}" required>
 
-    <button type="submit">로그인</button>
-    <button type="button" onclick="location.href='signup'">회원가입</button>
+    <label for="name">이름: </label>
+    <input type="text" th:field="*{name}" required>
+
+    <label for="username">이메일: </label>
+    <input type="text" th:field="*{email}" required>
+
+    <label for="username">전화번호: </label>
+    <input type="text" th:field="*{ph_num}" required>
+
+    <label for="username">주소: </label>
+    <input type="text" th:field="*{address}" required>
+
+
+    <button class="btn-submit" type="submit">회원가입</button>
 </form>
 
 </body>

@@ -3,12 +3,14 @@ package com.dbs.dbsproject.dto;
 import com.dbs.dbsproject.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class JoinRequest {
     private String name;
-    private String id;
+    private String loginid;
     private String password;
     private String email;
     private String ph_num;
@@ -16,7 +18,8 @@ public class JoinRequest {
 
     public User toEntity(String encodedPassword){
         return User.builder()
-                .id(this.id)
+                .name(this.name)
+                .loginid(this.loginid)
                 .password(encodedPassword)
                 .email(this.email)
                 .ph_num(this.ph_num)
