@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,8 +66,7 @@ public class MarketController {
         PageRequest sortByPostid = PageRequest.of(page, pageSize, Sort.by("productid").descending());
         Page<Product> productPage = productService.findAllposts(sortByPostid);
 
-        model.addAttribute("products", productPage.getContent());
-
+        model.addAttribute("products", productPage.getContent().stream());
         model.addAttribute("currentPage", productPage.getNumber()+1);
         model.addAttribute("totalPages", productPage.getTotalPages());
 
@@ -84,8 +85,8 @@ public class MarketController {
             return "signup";
         }
 
-        productService.save(productDto);
-        imageService.storeFiles(Arrays.stream(multipartFile).toList(), productDto);
+        Long productid = productService.save(productDto).getProductid();
+        imageService.storeFiles(Arrays.stream(multipartFile).toList(), productid);
         return "redirect:/products";
     }
 }

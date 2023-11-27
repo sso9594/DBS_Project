@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,11 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ProductDto {
+    private Long productid;
     private String userid;
 
     private String title;
 
     private String content;
+
+    private String thumbnail;
 
     private Integer price;
 
@@ -26,9 +30,11 @@ public class ProductDto {
 
     public Product toEntity(){
         return Product.builder()
+                .productid(this.productid)
                 .userid(this.userid)
                 .title(this.title)
                 .content(this.content)
+                .thumbnail(this.thumbnail)
                 .price(this.price)
                 .state(this.state)
                 .date(this.date)

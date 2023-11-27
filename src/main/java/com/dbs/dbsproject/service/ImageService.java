@@ -4,6 +4,7 @@ import com.dbs.dbsproject.domain.Image;
 import com.dbs.dbsproject.dto.ImageDto;
 import com.dbs.dbsproject.dto.ProductDto;
 import com.dbs.dbsproject.repository.ImageRepository;
+import com.dbs.dbsproject.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,36 +20,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-
-    @Value("${imageurl}")
-    private String fileDir;
+    private final ProductService productService;
 
     public String getFullPath(String filename){
-        return fileDir + filename;
+//        String filePath = System.getProperty("user.dir") + File.separator + "src" + File.separator + File.separator + "main" + File.separator + "resources" + File.separator + "static" +  File.separator + "images" +File.separator;
+        String filePath = "C:/Users/신승용/OneDrive/Desktop/DBS_Project/images/";
+        return filePath + filename;
     }
 
-    public List<Image> storeFiles(List<MultipartFile> multipartFiles, ProductDto productDto) throws IOException{
+    public List<Image> storeFiles(List<MultipartFile> multipartFiles, Long id) throws IOException{
         List<Image> storeFileResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles){
             if(!multipartFile.isEmpty()){
-                storeFileResult.add(storeFile(multipartFile, productDto));
+                storeFileResult.add(storeFile(multipartFile, id));
+                if (multipartFiles.get(0) == multipartFile){
+                    productService.updateThumbnail(id, storeFileResult.get(0).getFilePath());
+                }
             }
         }
         return storeFileResult;
     }
 
-    public Image storeFile(MultipartFile multipartFile, ProductDto productDto) throws IOException{
+    public Image storeFile(MultipartFile multipartFile, Long id) throws IOException{
         if(multipartFile.isEmpty()){
             return null;
         }
 
         String originFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originFileName);
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
+
+        String fullPath = getFullPath(storeFileName);
+        File directory = new File(fullPath).getParentFile();
+        if(!directory.exists()){
+            directory.mkdirs();
+        }
+
+        multipartFile.transferTo(new File(fullPath));
         ImageDto image = ImageDto.builder()
-                .productid(productDto.toEntity().getProductid())
                 .originFileName(originFileName)
                 .filePath(storeFileName)
+                .productid(id)
                 .build();
         return imageRepository.save(image.toEntity());
     }

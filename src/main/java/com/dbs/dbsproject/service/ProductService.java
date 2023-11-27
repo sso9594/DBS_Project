@@ -1,7 +1,9 @@
 package com.dbs.dbsproject.service;
 
+import com.dbs.dbsproject.domain.Image;
 import com.dbs.dbsproject.domain.Product;
 import com.dbs.dbsproject.dto.ProductDto;
+import com.dbs.dbsproject.repository.ImageRepository;
 import com.dbs.dbsproject.repository.ProductRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
-    @Value("${imageurl}")
-    private String imageDir;
+    private final ImageRepository imageRepository;
 
     public Product save(ProductDto productDto){
         return productRepository.save(productDto.toEntity());
@@ -59,5 +59,17 @@ public class ProductService {
 
     public Product updateById (ProductDto productDto){
         return save(productDto);
+    }
+
+    public List<String> getImageUrl(Product product){
+        List<String> imageUrl = imageRepository.findAllByProductid(product.getProductid());
+        System.out.println(imageUrl);
+        return imageUrl;
+    }
+
+    public Product updateThumbnail (Long id, String url){
+        Product target = productRepository.findById(id).get();
+        target.setThumbnail(url);
+        return productRepository.save(target);
     }
 }

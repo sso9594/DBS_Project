@@ -56,10 +56,10 @@
             <ul id="productlist">
                 <li th:each="product : ${products}">
                     <a th:href="@{'/detail/' + ${product.productid}}">
-                        <img id="detailimg" th:src="@{product.img}" alt="img">
+                        <img id="detailimg" th:src="@{'/uploads/' + ${product.thumbnail}}" alt="img">
                         <p id="detailtitle" th:text="${product.title}">제품 제목</p>
                     </a>
-                    <h3 th:text="'가격: $' + ${product.price}">가격: $100</h3>
+                    <h3 th:text="'가격: ₩' + ${product.price}">가격: $100</h3>
                 </li>
             </ul>
             <div>

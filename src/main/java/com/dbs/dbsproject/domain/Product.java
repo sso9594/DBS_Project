@@ -19,7 +19,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long productid;
-
     @Column(name = "user_id")
     private String userid;
 
@@ -27,6 +26,7 @@ public class Product {
 
     private String content;
 
+    private String thumbnail;
     private Integer price;
 
     private boolean state;
