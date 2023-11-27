@@ -81,7 +81,7 @@
 </head>
 <body>
 
-<form th:action="@{/save}" th:object="${ProductDto}" method="post">
+<form th:action="@{/save}" th:object="${ProductDto}" method="post" enctype="multipart/form-data">
     <h2>게시글 작성</h2>
 
     <label for="title">제목:</label>
@@ -92,7 +92,7 @@
 
     <label for="img">이미지 URL:</label>
     <img id="preview" />
-    <input type="file" th:field="*{img}" onchange="readUrl(this);" accept="image/*" multiple>
+    <input type="file" name="multipartFile" onchange="readUrl(this);" accept="image/*" multiple>
 
     <label for="price">가격:</label>
     <input type="number" th:field="*{price}" required>

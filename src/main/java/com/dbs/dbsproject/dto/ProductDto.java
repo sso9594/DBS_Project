@@ -18,8 +18,6 @@ public class ProductDto {
 
     private String content;
 
-    private String img;
-
     private Integer price;
 
     private boolean state;
@@ -31,7 +29,6 @@ public class ProductDto {
                 .userid(this.userid)
                 .title(this.title)
                 .content(this.content)
-                .img(this.img)
                 .price(this.price)
                 .state(this.state)
                 .date(this.date)
@@ -43,7 +40,6 @@ public class ProductDto {
                 .userid(product.getUserid())
                 .title(product.getTitle())
                 .content(product.getContent())
-                .img(product.getImg())
                 .price(product.getPrice())
                 .date(product.getDate())
                 .build();

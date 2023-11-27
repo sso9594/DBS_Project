@@ -27,8 +27,6 @@ public class Product {
 
     private String content;
 
-    private String img;
-
     private Integer price;
 
     private boolean state;
@@ -40,7 +38,6 @@ public class Product {
         this.userid = productDto.getUserid();
         this.title = productDto.getTitle();
         this.content = productDto.getContent();
-        this.img = productDto.getImg();
         this.price = productDto.getPrice();
         this.date = productDto.getDate();
         return this;

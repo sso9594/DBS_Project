@@ -4,6 +4,7 @@ import com.dbs.dbsproject.domain.Product;
 import com.dbs.dbsproject.dto.JoinRequest;
 import com.dbs.dbsproject.dto.LoginRequest;
 import com.dbs.dbsproject.dto.ProductDto;
+import com.dbs.dbsproject.service.ImageService;
 import com.dbs.dbsproject.service.ProductService;
 import com.dbs.dbsproject.service.UserService;
 import jakarta.validation.Valid;
@@ -16,8 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class MarketController {
 
     private final UserService userService;
     private final ProductService productService;
+    private final ImageService imageService;
 
     @GetMapping
     public String login(Model model){
@@ -74,12 +79,13 @@ public class MarketController {
     }
 
     @PostMapping(value = "/save")
-    public String save(@Valid @ModelAttribute("ProductDto") ProductDto productDto, BindingResult result) throws NoSuchAlgorithmException {
+    public String save(@Valid @ModelAttribute("ProductDto") ProductDto productDto, @RequestParam MultipartFile[] multipartFile, BindingResult result) throws NoSuchAlgorithmException, IOException {
         if(result.hasErrors()){
             return "signup";
         }
 
         productService.save(productDto);
+        imageService.storeFiles(Arrays.stream(multipartFile).toList(), productDto);
         return "redirect:/products";
     }
 }

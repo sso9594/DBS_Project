@@ -3,20 +3,29 @@ package com.dbs.dbsproject.service;
 import com.dbs.dbsproject.domain.Product;
 import com.dbs.dbsproject.dto.ProductDto;
 import com.dbs.dbsproject.repository.ProductRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+
+    @Value("${imageurl}")
+    private String imageDir;
 
     public Product save(ProductDto productDto){
         return productRepository.save(productDto.toEntity());
