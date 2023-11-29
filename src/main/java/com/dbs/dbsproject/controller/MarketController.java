@@ -1,14 +1,18 @@
 package com.dbs.dbsproject.controller;
 
+import com.dbs.dbsproject.domain.Image;
 import com.dbs.dbsproject.domain.Product;
 import com.dbs.dbsproject.dto.JoinRequest;
 import com.dbs.dbsproject.dto.LoginRequest;
 import com.dbs.dbsproject.dto.ProductDto;
+import com.dbs.dbsproject.repository.ImageRepository;
 import com.dbs.dbsproject.service.ImageService;
 import com.dbs.dbsproject.service.ProductService;
 import com.dbs.dbsproject.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,6 +27,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.SimpleTimeZone;
 import java.util.stream.Collectors;
 
 @Controller
@@ -41,8 +46,8 @@ public class MarketController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity login(LoginRequest loginRequest) throws NoSuchAlgorithmException {
-       return userService.login(loginRequest);
+    public String login(LoginRequest loginRequest) throws NoSuchAlgorithmException {
+       return "redirect:/products";
     }
 
     @RequestMapping(value = "/signup")
@@ -79,14 +84,51 @@ public class MarketController {
         return "pagewrite";
     }
 
+    @RequestMapping(value = "/detail/update")
+    public String update(Model model, Integer id){
+        ProductDto productDto = new ProductDto();
+        productDto.setProductid(Long.valueOf(id));
+        model.addAttribute("ProductDto", productDto);
+        return "pageupdate";
+    }
+
     @PostMapping(value = "/save")
     public String save(@Valid @ModelAttribute("ProductDto") ProductDto productDto, @RequestParam MultipartFile[] multipartFile, BindingResult result) throws NoSuchAlgorithmException, IOException {
+
         if(result.hasErrors()){
             return "signup";
         }
 
         Long productid = productService.save(productDto).getProductid();
         imageService.storeFiles(Arrays.stream(multipartFile).toList(), productid);
+        return "redirect:/products";
+    }
+
+    @PostMapping(value = "/detail/update")
+    public String update(@Valid @ModelAttribute("ProductDto") ProductDto productDto, @RequestParam MultipartFile[] multipartFile, BindingResult result) throws NoSuchAlgorithmException, IOException {
+
+        if(result.hasErrors()){
+            return "signup";
+        }
+
+        Long productid = productService.updateById(productDto).getProductid();
+        imageService.storeFiles(Arrays.stream(multipartFile).toList(), productid);
+        return "redirect:/detail/" + productDto.getProductid();
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    public String detailProduct(Model model, @PathVariable("id") Long id) throws ChangeSetPersister.NotFoundException {
+        Product result = productService.findById(id);
+        List<Image> imageResult = imageService.findAllByProductId(id);
+        model.addAttribute("image", imageResult.stream());
+        model.addAttribute("product", result);
+
+        return "pagedetail";
+    }
+
+    @GetMapping(value = "/detail/delete")
+    public String deleteProduct(Integer id){
+        productService.deleteProduct(Long.valueOf(id));
         return "redirect:/products";
     }
 }

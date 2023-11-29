@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class UrlConfig implements WebMvcConfigurer {
 
-    private String externUrl = "file:///C:/Users/신승용/OneDrive/Desktop/DBS_Project/images/";
+    private String externUrl = "file:///Users/sinseung-yong/Desktop/dbsproject/images/";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){

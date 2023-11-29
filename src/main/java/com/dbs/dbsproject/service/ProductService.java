@@ -58,11 +58,13 @@ public class ProductService {
     }
 
     public Product updateById (ProductDto productDto){
-        return save(productDto);
+        Product product = productRepository.findById(productDto.getProductid())
+                .orElseThrow(()->new IllegalArgumentException("해당 게시물이 없습니다."));
+        return product.update(productDto);
     }
 
-    public List<String> getImageUrl(Product product){
-        List<String> imageUrl = imageRepository.findAllByProductid(product.getProductid());
+    public List<Image> getImageUrl(Product product){
+        List<Image> imageUrl = imageRepository.findAllByProductid(product.getProductid());
         System.out.println(imageUrl);
         return imageUrl;
     }

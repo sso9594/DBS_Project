@@ -24,7 +24,7 @@ public class ImageService {
 
     public String getFullPath(String filename){
 //        String filePath = System.getProperty("user.dir") + File.separator + "src" + File.separator + File.separator + "main" + File.separator + "resources" + File.separator + "static" +  File.separator + "images" +File.separator;
-        String filePath = "C:/Users/신승용/OneDrive/Desktop/DBS_Project/images/";
+        String filePath = "/Users/sinseung-yong/Desktop/dbsproject/images/";
         return filePath + filename;
     }
 
@@ -73,5 +73,9 @@ public class ImageService {
     private String extractExt(String originFileName){
         int pos = originFileName.lastIndexOf(".");
         return originFileName.substring(pos + 1);
+    }
+
+    public List<Image> findAllByProductId (Long id){
+        return imageRepository.findAllByProductid(id);
     }
 }
