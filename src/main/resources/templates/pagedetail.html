@@ -99,6 +99,23 @@
         }
     </style>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 저장된 로그인 ID가 있는 경우, 해당 ID를 입력란에 설정
+            var postId = document.getElementById("postid").value;
+            /*]]>*/
+            // 세션 스토리지에 로그인 ID 저장
+            sessionStorage.setItem('postId', postId);
+        });
+
+        var loginId = sessionStorage.getItem('loginId');
+
+        // loginId를 폼 필드에 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            // 여기에 스크립트 코드 작성
+            document.getElementById('buyerId').value = loginId;
+            document.getElementById('userId').value = loginId;
+        });
+
 
     </script>
 </head>
@@ -116,8 +133,14 @@
     <p th:text="${product.content}">상품 설명</p>
     <span id="productDate" th:text="${#temporals.format(product.date, 'yyyy-MM-dd HH:mm')}"></span>
     <br>
-    <button>구매하기</button>
-    <button>장바구니에 담기</button>
+    <form th:action="@{'/trans/save/' + ${product.productid}}" th:object="${TransDto}" method="post">
+        <input type="hidden" id="buyerId" th:field="*{buyerId}">
+        <button>구매하기</button>
+    </form>
+    <form th:action="@{'/wish/save/' + ${product.productid}}" th:object="${WishDto}" method="post">
+        <input type="hidden" id="userId" th:field="*{userId}">
+        <button>장바구니에 담기</button>
+    </form>
 <!--    <button id="productupdate" type="button" onclick="location.href='update'">글수정</button>-->
     <a id="updateButton" th:href="@{/detail/update(id=${product.productid})}">글수정</a>
     <a id="deleteButton" th:href="@{/detail/delete(id=${product.productid})}" onclick="return confirm('정말 삭제하시겠습니까?')">글삭제</a>
