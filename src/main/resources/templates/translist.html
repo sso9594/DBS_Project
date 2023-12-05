@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연근마켓</title>
+    <meta charset = "utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Karla:wght@300&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="stat.js"></script>
+    <style>
+        li{
+            list-style: none;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+        #productlist h3, p{
+            margin: 0px;
+        }
+        body {
+            background-color: #f4f4f4;
+        }
+        #productitem {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+
+    </style>
+    <script>
+        var loginId = sessionStorage.getItem('loginId');
+
+        // loginId를 폼 필드에 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            // 여기에 스크립트 코드 작성
+            document.getElementById('loginIdField').href = "/trans/" + loginId;
+            document.getElementById('wishField').href = "/wish/" + loginId;
+
+        });
+    </script>
+</head>
+<body>
+
+<header>
+    <div id = "nav">
+        <div id = "logo">
+            <a href="/products"><h1>중고제품 거래 사이트</h1></a>
+        </div>
+
+        <div id = "menu">
+            <ul>
+                <li><a href="/products">중고제품</a></li>
+                <li><a id="loginIdField" href="/trans">내 거래</a></li>
+                <li><a id="wishField" href="/wish">찜목록</a></li>
+            </ul>
+        </div>
+    </div>
+  <!-- 로그인, 회원가입 등의 네비게이션 링크 추가 -->
+</header>
+
+<main>
+    <div>
+        <section id="product-list">
+            <h2>내 거래 목록</h2>
+
+            <!-- 실제로는 서버에서 가져온 중고제품 목록을 반복해서 표시해야 합니다. -->
+            <ul id="productlist">
+                <li id="productitem" th:each="transaction : ${Transactions}">
+                    <a th:href="@{'/detail/' + ${transaction.productId}}">
+                        <h3 id="detailtitle" th:text="${transaction.productTitle}">제품 제목</h3>
+                    </a>
+                    <p th:text="'구매 상태 : ' + (${transaction.state} ? '구매중' : '구매취소')">가격: $100</p>
+                    <p th:text="'배송 상태 : ' + (${transaction.deliveryState} ? '배송완료' : '배송중')"></p>
+                </li>
+            </ul>
+            <div id="pagination">
+                <span th:if="${currentPage > 1}">
+                    <a th:href="@{/Transactions(page=${currentPage - 1})}">이전 페이지</a>
+                </span>
+                <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a th:href="@{/Transactions(page=${i}-1)}" th:text="${i}">1</a>
+                </span>
+                <span th:if="${currentPage < totalPages}">
+                    <a th:href="@{/Transactions(page=${currentPage + 1})}">다음 페이지</a>
+                </span>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+  <p>&copy; 2023 중고제품 거래 사이트</p>
+</footer>
+
+</body>
+</html>
