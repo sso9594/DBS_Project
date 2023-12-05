@@ -21,6 +21,8 @@ public class Transaction {
     @Column(name = "buyer_id")
     private String buyerId;
 
+    private String productTitle;
+
     @Column(name = "seller_id")
     private String sellerId;
 

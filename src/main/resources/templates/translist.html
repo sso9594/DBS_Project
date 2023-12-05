@@ -26,6 +26,17 @@
         #productlist h3, p{
             margin: 0px;
         }
+        body {
+            background-color: #f4f4f4;
+        }
+        #productitem {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+
     </style>
     <script>
         var loginId = sessionStorage.getItem('loginId');
@@ -35,6 +46,7 @@
             // 여기에 스크립트 코드 작성
             document.getElementById('loginIdField').href = "/trans/" + loginId;
             document.getElementById('wishField').href = "/wish/" + loginId;
+
         });
     </script>
 </head>
@@ -50,7 +62,7 @@
             <ul>
                 <li><a href="/products">중고제품</a></li>
                 <li><a id="loginIdField" href="/trans">내 거래</a></li>
-                <li><a id="wishField" href="#">찜목록</a></li>
+                <li><a id="wishField" href="/wish">찜목록</a></li>
             </ul>
         </div>
     </div>
@@ -60,31 +72,27 @@
 <main>
     <div>
         <section id="product-list">
-            <h2>중고제품 목록</h2>
+            <h2>내 거래 목록</h2>
 
             <!-- 실제로는 서버에서 가져온 중고제품 목록을 반복해서 표시해야 합니다. -->
             <ul id="productlist">
-                <li th:each="product : ${products}">
-                    <a th:href="@{'/detail/' + ${product.productid}}">
-                        <img id="detailimg" th:src="@{'/uploads/' + ${product.thumbnail}}" alt="img">
-                        <p id="detailtitle" th:text="${product.title}">제품 제목</p>
+                <li id="productitem" th:each="transaction : ${Transactions}">
+                    <a th:href="@{'/detail/' + ${transaction.productId}}">
+                        <h3 id="detailtitle" th:text="${transaction.productTitle}">제품 제목</h3>
                     </a>
-                    <h3 th:text="'가격: ₩' + ${product.price}">가격: $100</h3>
+                    <p th:text="'구매 상태 : ' + (${transaction.state} ? '구매중' : '구매취소')">가격: $100</p>
+                    <p th:text="'배송 상태 : ' + (${transaction.deliveryState} ? '배송완료' : '배송중')"></p>
                 </li>
             </ul>
-            <div>
-                <button id="productwrite" type="button" onclick="location.href='save'">작성</button>
-            </div>
-            <!-- 페이지네이션을 위한 링크 -->
             <div id="pagination">
                 <span th:if="${currentPage > 1}">
-                    <a th:href="@{/products(page=${currentPage - 1})}">이전 페이지</a>
+                    <a th:href="@{/Transactions(page=${currentPage - 1})}">이전 페이지</a>
                 </span>
                 <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:href="@{/products(page=${i}-1)}" th:text="${i}">1</a>
+                    <a th:href="@{/Transactions(page=${i}-1)}" th:text="${i}">1</a>
                 </span>
                 <span th:if="${currentPage < totalPages}">
-                    <a th:href="@{/products(page=${currentPage + 1})}">다음 페이지</a>
+                    <a th:href="@{/Transactions(page=${currentPage + 1})}">다음 페이지</a>
                 </span>
             </div>
         </section>
