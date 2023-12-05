@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/dbs?useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: 1234
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 20MB
   jpa:
     hibernate:
       ddl-auto: update

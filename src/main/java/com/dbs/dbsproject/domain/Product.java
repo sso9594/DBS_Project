@@ -19,7 +19,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long productid;
-
     @Column(name = "user_id")
     private String userid;
 
@@ -27,8 +26,7 @@ public class Product {
 
     private String content;
 
-    private String img;
-
+    private String thumbnail;
     private Integer price;
 
     private boolean state;
@@ -40,7 +38,6 @@ public class Product {
         this.userid = productDto.getUserid();
         this.title = productDto.getTitle();
         this.content = productDto.getContent();
-        this.img = productDto.getImg();
         this.price = productDto.getPrice();
         this.date = productDto.getDate();
         return this;

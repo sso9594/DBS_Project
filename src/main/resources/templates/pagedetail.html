@@ -38,6 +38,7 @@
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 20px;
+            object-fit: contain;
         }
 
         h2, p {
@@ -73,20 +74,81 @@
             cursor: pointer;
         }
 
+        #deleteButton, #updateButton{
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            float: right;
+        }
+        #updateButton{
+            float: right;
+            margin-left: 10px;
+        }
+
+        #productupdate{
+            float: right;
+            margin-left: 10px;
+        }
+
         button:hover {
             background-color: #45a049;
         }
+        .pr_button{
+            display: inline;
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 저장된 로그인 ID가 있는 경우, 해당 ID를 입력란에 설정
+            var postId = document.getElementById("postid").value;
+            /*]]>*/
+            // 세션 스토리지에 로그인 ID 저장
+            sessionStorage.setItem('postId', postId);
+        });
+
+        var loginId = sessionStorage.getItem('loginId');
+
+        // loginId를 폼 필드에 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            // 여기에 스크립트 코드 작성
+            document.getElementById('buyerId').value = loginId;
+            document.getElementById('userId').value = loginId;
+        });
+
+
+    </script>
 </head>
 <body>
 
 <div class="product-details">
-    <img th:src="@{/images/product.img}" alt="Product Image">
+    <div>
+        <button type="button" onclick="location.href='/products'">뒤로</button>
+    </div>
+    <div th:each="imgUrl : ${image}">
+        <img th:src="@{'/uploads/' + ${imgUrl.filePath}}" alt="Product Image"/>
+    </div>
     <h2>상품 제목</h2>
     <p class="price" th:text="${'가격: ₩' + product.price}">가격: $100</p>
     <p th:text="${product.content}">상품 설명</p>
-    <button>장바구니에 담기</button>
+    <span id="productDate" th:text="${#temporals.format(product.date, 'yyyy-MM-dd HH:mm')}"></span>
+    <br>
+    <div>
+        <form class="pr_button" th:action="@{'/trans/save/' + ${product.productid}}" th:object="${TransDto}" method="post">
+            <input type="hidden" id="buyerId" th:field="*{buyerId}">
+            <button>구매하기</button>
+        </form>
+        <form class="pr_button" th:action="@{'/wish/save/' + ${product.productid}}" th:object="${WishDto}" method="post">
+            <input type="hidden" id="userId" th:field="*{userId}">
+            <button>장바구니에 담기</button>
+        </form>
+    </div>
+<!--    <button id="productupdate" type="button" onclick="location.href='update'">글수정</button>-->
+    <a id="updateButton" th:href="@{/detail/update(id=${product.productid})}">글수정</a>
+    <a id="deleteButton" th:href="@{/detail/delete(id=${product.productid})}" onclick="return confirm('정말 삭제하시겠습니까?')">글삭제</a>
 </div>
-
 </body>
 </html>

@@ -55,6 +55,29 @@
             background-color: #45a049;
         }
     </style>
+    <script th:inline="javascript">
+        // 로그인 ID를 세션 스토리지에 저장하는 함수
+
+
+        function saveLoginIdToSessionStorage() {
+            // Thymeleaf 템플릿 엔진을 통해 로그인 ID를 가져오기
+            /*<![CDATA[*/
+            var loginId = document.getElementById("loginid").value;
+            /*]]>*/
+            // 세션 스토리지에 로그인 ID 저장
+            sessionStorage.setItem('loginId', loginId);
+        }
+
+        // 페이지 로드 시 실행할 함수
+        document.addEventListener('DOMContentLoaded', function () {
+            // 저장된 로그인 ID가 있는 경우, 해당 ID를 입력란에 설정
+            var storedLoginId = sessionStorage.getItem('loginId');
+            if (storedLoginId) {
+                document.getElementById('loginid').value = storedLoginId;
+            }
+        });
+
+    </script>
 </head>
 <body>
 
@@ -67,7 +90,7 @@
     <label for="password">비밀번호:</label>
     <input type="password" id="password" th:field="*{password}" required>
 
-    <button type="submit">로그인</button>
+    <button id="loginButton" onclick="saveLoginIdToSessionStorage()" type="submit">로그인</button>
     <button type="button" onclick="location.href='signup'">회원가입</button>
 </form>
 
