@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Karla:wght@300&display=swap" rel="stylesheet">
+    <title>상품 상세 페이지</title>
+    <!-- 추가적인 스타일시트 및 스크립트를 여기에 추가하세요 -->
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .product-details {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+
+        img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+        h2, p {
+            margin: 0;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #4caf50;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .description {
+            margin-top: 20px;
+            color: #555;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #deleteButton, #updateButton{
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            float: right;
+        }
+        #updateButton{
+            float: right;
+            margin-left: 10px;
+        }
+
+        #productupdate{
+            float: right;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        .pr_button{
+            display: inline;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 저장된 로그인 ID가 있는 경우, 해당 ID를 입력란에 설정
+            var postId = document.getElementById("postid").value;
+            /*]]>*/
+            // 세션 스토리지에 로그인 ID 저장
+            sessionStorage.setItem('postId', postId);
+        });
+
+        var loginId = sessionStorage.getItem('loginId');
+
+        // loginId를 폼 필드에 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            // 여기에 스크립트 코드 작성
+            document.getElementById('buyerId').value = loginId;
+            document.getElementById('userId').value = loginId;
+        });
+
+
+    </script>
+</head>
+<body>
+
+<div class="product-details">
+    <div>
+        <button type="button" onclick="location.href='/products'">뒤로</button>
+    </div>
+    <div th:each="imgUrl : ${image}">
+        <img th:src="@{'/uploads/' + ${imgUrl.filePath}}" alt="Product Image"/>
+    </div>
+    <h2>상품 제목</h2>
+    <p class="price" th:text="${'가격: ₩' + product.price}">가격: $100</p>
+    <p th:text="${product.content}">상품 설명</p>
+    <span id="productDate" th:text="${#temporals.format(product.date, 'yyyy-MM-dd HH:mm')}"></span>
+    <br>
+    <div>
+        <form class="pr_button" th:action="@{'/trans/save/' + ${product.productid}}" th:object="${TransDto}" method="post">
+            <input type="hidden" id="buyerId" th:field="*{buyerId}">
+            <button>구매하기</button>
+        </form>
+        <form class="pr_button" th:action="@{'/wish/save/' + ${product.productid}}" th:object="${WishDto}" method="post">
+            <input type="hidden" id="userId" th:field="*{userId}">
+            <button>장바구니에 담기</button>
+        </form>
+    </div>
+<!--    <button id="productupdate" type="button" onclick="location.href='update'">글수정</button>-->
+    <a id="updateButton" th:href="@{/detail/update(id=${product.productid})}">글수정</a>
+    <a id="deleteButton" th:href="@{/detail/delete(id=${product.productid})}" onclick="return confirm('정말 삭제하시겠습니까?')">글삭제</a>
+</div>
+</body>
+</html>
